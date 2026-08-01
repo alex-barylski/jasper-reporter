@@ -228,12 +228,6 @@ See [build.MD](./build.MD) for the non-Docker build, run, and test flow.
 
 ---
 
-## Standalone Build
-
-See [build.MD](./build.MD) for the non-Docker build, run, and test flow.
-
----
-
 ## Docker & Container Registry
 
 Docker build/run and registry publishing instructions were moved to docker.md. See: [docker.md](./docker.md)
