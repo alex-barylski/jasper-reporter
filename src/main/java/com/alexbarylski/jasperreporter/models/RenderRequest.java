@@ -62,7 +62,7 @@ public class RenderRequest {
         /** json | jdbc | mixed | none */
         private String type;
 
-        /** Raw JSON data passed to JsonDataSource when type = json or mixed */
+        /** Raw data passed to the JSON-style datasource when type = json or mixed */
         private Object data;
 
         /** JDBC connection config when type = jdbc or mixed */

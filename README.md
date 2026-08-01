@@ -14,11 +14,12 @@ Designed to run as a **sidecar container** alongside any PHP application, sharin
    - [POST /render](#post-render)
    - [GET /list](#get-list)
 3. [Error Envelope Format](#error-envelope-format)
-4. [Dockerfile Instructions](#dockerfile-instructions)
-5. [Docker Compose Example](#docker-compose-example)
-6. [PHP Usage Examples](#php-usage-examples)
-7. [Configuration](#configuration)
-8. [Security Notes](#security-notes)
+4. [Standalone Build](#standalone-build)
+5. [Dockerfile Instructions](#dockerfile-instructions)
+6. [Docker Compose Example](#docker-compose-example)
+7. [PHP Usage Examples](#php-usage-examples)
+8. [Configuration](#configuration)
+9. [Security Notes](#security-notes)
 
 ---
 
@@ -28,7 +29,7 @@ Designed to run as a **sidecar container** alongside any PHP application, sharin
 |--------------|----------------------------------|
 | Language     | Java 17                          |
 | Framework    | Javalin 6                        |
-| Reports lib  | JasperReports 6.21.3             |
+| Reports lib  | JasperReports 6.19.0             |
 | Default port | 8080 (override with `PORT` env)  |
 | Reports dir  | `/reports` (override with `REPORTS_DIR` env) |
 
@@ -221,64 +222,37 @@ HTTP status codes:
 
 ---
 
-## Dockerfile Instructions
+## Standalone Build
 
-The project ships with a two-stage `Dockerfile`:
-
-```
-Stage 1 (builder)  maven:3.9-eclipse-temurin-17
-Stage 2 (runtime)  eclipse-temurin:17-jre
-```
-
-### Build the image
-
-```bash
-docker build -t jasper-reporter:latest .
-```
-
-### Run locally
-
-```bash
-docker run --rm \
-  -p 8080:8080 \
-  -v "$(pwd)/reports:/reports" \
-  jasper-reporter:latest
-```
-
-### Environment variables
-
-| Variable      | Default    | Description                    |
-|---------------|------------|--------------------------------|
-| `PORT`        | `8080`     | HTTP port the server listens on |
-| `REPORTS_DIR` | `/reports` | Root directory for report files |
+See [build.MD](./build.MD) for the non-Docker build, run, and test flow.
 
 ---
 
-## Docker Compose Example
+## Standalone Build
 
-```yaml
-services:
-  app:
-    build: .
-    networks: [internal]
-    volumes:
-      - ./reports:/reports
+See [build.MD](./build.MD) for the non-Docker build, run, and test flow.
 
-  jasper:
-    image: ghcr.io/alex-barylski/jasper-reporter:latest
-    networks: [internal]
-    expose:
-      - "8080"
-    volumes:
-      - ./reports:/reports
+---
 
-networks:
-  internal:
-    driver: bridge
+## Docker & Container Registry
+
+Docker build/run and registry publishing instructions were moved to docker.md. See: [docker.md](./docker.md)
+
+If you only need a quick local run and 8080 is in use elsewhere, map a different host port, e.g.:
+
+```bash
+docker run --rm -p 8081:8080 -v "$(pwd)/reports:/reports" jasper-reporter:latest
 ```
 
-> **Note:** `expose` makes port 8080 available only within the `internal` network.  
-> The PHP `app` service calls `http://jasper:8080/...` — Jasper Reporter is never exposed to the public internet.
+Or run internal-only on a Docker network and test from another container:
+
+```bash
+docker network create jasper-net
+docker run --rm --name jasper --network jasper-net -v "$(pwd)/reports:/reports" jasper-reporter:latest
+docker run --rm --network jasper-net curlimages/curl curl http://jasper:8080/list
+```
+
+For full build, run, compose and publish steps see docker.md.
 
 ---
 

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 7.0.3.final using JasperReports Library version 6.19.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="equipment" pageWidth="270" pageHeight="200" columnWidth="270" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c2f4e6a7-2345-4a1e-9a2b-222222222222">
+	<field name="name" class="java.lang.String"/>
+	<field name="type" class="java.lang.String"/>
+	<field name="hrs" class="java.lang.Number"/>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="150" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="d8d19faf-406f-44a3-abc7-31ca069eefaa"/>
+				<box padding="3">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Equipment Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="150" y="0" width="53" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="1c26b7ac-25f4-4161-ae21-35b8fb0257fc"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="203" y="0" width="62" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="bc10178a-4e31-4773-a57e-22e2b587eda7"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[HRS]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18">
+			<textField>
+				<reportElement x="0" y="0" width="150" height="18" uuid="77244863-3c4b-43ae-b691-5c36ce4982e5"/>
+				<box padding="3">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name} == null ? "" : $F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="150" y="0" width="53" height="18" uuid="81a73fd8-d1ca-4052-87a8-1cf28ced4907"/>
+				<box padding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{type} == null ? "" : $F{type}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.##">
+				<reportElement x="203" y="0" width="62" height="18" uuid="b43dfb7a-0597-4542-bbe0-e146e360557d"/>
+				<box padding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{hrs} == null ? "" : (new java.text.DecimalFormat("#,##0.##")).format($F{hrs})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

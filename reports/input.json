@@ -1,0 +1,47 @@
+{
+  "Date": "2026-07-23T12:00:00Z",
+  "Customer": "ABC CO.",
+  "CustomerApprover": "John Smith",
+  "ESIJobNumber": 723873,
+  "AgreementNumber": "AGR-2026-00123",
+  "PurchaseOrderNumber": "PO-987654",
+  "WorkBeingDone": "Routine maintenance and safety checks on site A.",
+  "StartTime": "07:30",
+  "EndTime": "16:45",
+  "Subdivision": "North Yard",
+  "MPRange": "MP 12+000 - MP 14+500",
+  "GangName": "Gamma Crew",
+  "StateProvince": "Ontario",
+  "City": "Toronto",
+  "CustomerForeman": {
+    "name": "Michael Brown",
+    "employeeNumber": "EMP-3344"
+  },
+  "ESIForeman": {
+    "name": "Daniel Green"
+  },
+  "Employees": [
+    {"name": "Justice Letain", "position": "Welder", "rt_ot": "8", "hrs": 8},
+    {"name": "Ava Thompson", "position": "Foreman", "rt_ot": "8", "hrs": 8},
+    {"name": "Liam Carter", "position": "Operator", "rt_ot": "8", "hrs": 7.5}
+  ],
+  "Equipment": [
+      {"name": "CAT 320 Excavator", "type": "Heavy Equipment", "hrs": 6.5},
+      {"name": "Bobcat S650", "type": "Skid Steer", "hrs": 4.0}
+  ],
+  "Material": [
+	{"name": "Granite Aggregate", "qty": 10},
+	{"name": "Cement Bags", "qty": 25},
+	{"name": "Rebar 10mm", "qty": 50}
+  ],
+  "Subcontractors": [
+	{"name": "Alpha Paving", "workDone": "Paving - Section A"},
+	{"name": "Beta Electrical", "workDone": "Temporary site power"},
+	{"name": "Gamma Landscaping", "workDone": "Site cleanup and topsoil"}
+  ],
+  "Comments": [
+	{"text": "Checked all equipment and completed safety inspection."},
+	{"text": "No incidents; site cleared by 17:00."}
+  ]
+
+}

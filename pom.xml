@@ -16,8 +16,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javalin.version>6.3.0</javalin.version>
-        <jasperreports.version>7.0.7</jasperreports.version>
+        <jasperreports.version>6.19.0</jasperreports.version>
         <jackson.version>2.18.8</jackson.version>
+        <groovy.version>3.0.23</groovy.version>
         <slf4j.version>2.0.13</slf4j.version>
     </properties>
 
@@ -41,13 +42,13 @@
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>${jasperreports.version}</version>
-            <exclusions>
-                <!-- Exclude conflicting Groovy artifact to avoid class-loading issues -->
-                <exclusion>
-                    <groupId>org.codehaus.groovy</groupId>
-                    <artifactId>groovy-all</artifactId>
-                </exclusion>
-            </exclusions>
+        </dependency>
+
+        <!-- Groovy is required because the bundled reports use language="groovy" -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
 
         <!-- SLF4J simple binding for logging -->

@@ -4,8 +4,8 @@ import com.alexbarylski.jasperreporter.models.RenderRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
-import net.sf.jasperreports.engine.data.JsonDataSource;
 import net.sf.jasperreports.engine.export.*;
+import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
@@ -14,11 +14,9 @@ import net.sf.jasperreports.export.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -123,6 +121,7 @@ public class RenderService {
         // relative subreport references work without additional configuration.
         String subreportDir = reportFile.getParent().toAbsolutePath() + File.separator;
         params.put("SUBREPORT_DIR", subreportDir);
+        params.put("REPORT_DIR", subreportDir);
 
         if (request.getParams() != null) {
             params.putAll(request.getParams());
@@ -179,14 +178,46 @@ public class RenderService {
             return new JREmptyDataSource();
         }
         if (data instanceof List<?> list) {
-            // Fast path: array of objects → JRMapCollectionDataSource
-            @SuppressWarnings("unchecked")
-            List<Map<String, ?>> maps = (List<Map<String, ?>>) list;
+            List<Map<String, ?>> maps = new ArrayList<>(list.size());
+            for (Object item : list) {
+                maps.add(asRowMap(item));
+            }
+            if (maps.isEmpty()) {
+                return new JREmptyDataSource();
+            }
             return new JRMapCollectionDataSource(maps);
         }
-        // General path: serialize to JSON and use JsonDataSource
-        String jsonStr = objectMapper.writeValueAsString(data);
-        return new JsonDataSource(new ByteArrayInputStream(jsonStr.getBytes(StandardCharsets.UTF_8)));
+        Map<String, ?> row = asRowMap(data);
+        if (row.isEmpty()) {
+            return new JREmptyDataSource();
+        }
+        return new JRMapCollectionDataSource(List.of(row));
+    }
+
+    private Map<String, ?> asRowMap(Object value) {
+        if (value == null) {
+            return Map.of();
+        }
+        if (value instanceof Map<?, ?> map) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            for (Map.Entry<?, ?> entry : map.entrySet()) {
+                row.put(String.valueOf(entry.getKey()), entry.getValue());
+            }
+            return row;
+        }
+        if (value instanceof CharSequence
+                || value instanceof Number
+                || value instanceof Boolean
+                || value instanceof Character
+                || value.getClass().isEnum()) {
+            return Map.of("value", value);
+        }
+        @SuppressWarnings("unchecked")
+        Map<String, Object> row = objectMapper.convertValue(value, Map.class);
+        if (row == null || row.isEmpty()) {
+            return Map.of("value", value);
+        }
+        return row;
     }
 
     private Connection buildJdbcConnection(RenderRequest.Datasource ds) throws Exception {
@@ -201,59 +232,67 @@ public class RenderService {
     }
 
     private byte[] export(JasperPrint jasperPrint, String format) throws JRException {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
         switch (format) {
             case "pdf" -> {
-                JRPdfExporter exporter = new JRPdfExporter();
-                exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
-                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
-                exporter.exportReport();
+                return JasperExportManager.exportReportToPdf(jasperPrint);
             }
             case "xlsx" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JRXlsxExporter exporter = new JRXlsxExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "csv" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JRCsvExporter exporter = new JRCsvExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleWriterExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "html" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 HtmlExporter exporter = new HtmlExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleHtmlExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "ods" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JROdsExporter exporter = new JROdsExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "docx" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JRDocxExporter exporter = new JRDocxExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "rtf" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JRRtfExporter exporter = new JRRtfExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleWriterExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             case "xml" -> {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JRXmlExporter exporter = new JRXmlExporter();
                 exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
                 exporter.setExporterOutput(new SimpleXmlExporterOutput(out));
                 exporter.exportReport();
+                return out.toByteArray();
             }
             default -> throw new JRException("Unsupported export format: " + format);
         }
-        return out.toByteArray();
     }
 }
