@@ -11,32 +11,100 @@
 			<style mode="Opaque" backcolor="#F0EFEF"/>
 		</conditionalStyle>
 	</style>
-	<parameter name="json" class="java.lang.String">
-		<parameterDescription><![CDATA[Raw JSON string passed via -P json]]></parameterDescription>
-	</parameter>
+	<subDataset name="EmployeesDataset" uuid="f2f1d7bf-9f62-4c52-a2f5-7fcf8e986d2a">
+		<field name="name" class="java.lang.String"/>
+		<field name="position" class="java.lang.String"/>
+		<field name="rt_ot" class="java.lang.String"/>
+		<field name="hrs" class="java.lang.Number"/>
+	</subDataset>
+	<subDataset name="EquipmentDataset" uuid="a3b2c4d5-6e7f-48a1-b2c3-d4e5f6a7b8c9">
+		<field name="name" class="java.lang.String"/>
+		<field name="type" class="java.lang.String"/>
+		<field name="hrs" class="java.lang.Number"/>
+	</subDataset>
+	<subDataset name="MaterialDataset" uuid="c4d5e6f7-8a9b-4c1d-9e2f-3a4b5c6d7e8f">
+		<field name="name" class="java.lang.String"/>
+		<field name="qty" class="java.lang.Number"/>
+	</subDataset>
+	<subDataset name="SubcontractorDataset" uuid="d5e6f7a8-9b0c-4d1e-af23-456789abcdef">
+		<field name="name" class="java.lang.String"/>
+		<field name="workDone" class="java.lang.String"/>
+	</subDataset>
 	<parameter name="REPORT_DIR" class="java.lang.String">
 		<defaultValueExpression><![CDATA["/reports/"]]></defaultValueExpression>
-	</parameter>
-	<parameter name="date" class="java.lang.String">
-		<parameterDescription><![CDATA[Date extracted from JSON parameter (json.Date or json.date) or overridden with -P date]]></parameterDescription>
-		<defaultValueExpression><![CDATA[$P{json} == null ? "" : ({ def s = $P{json}.toString(); def m = (s =~ /(?i)"date"\s*:\s*"([^\"]*)"/); m.find() ? m[0][1] : "" })()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="customer" class="java.lang.String">
-		<parameterDescription><![CDATA[Customer extracted from JSON parameter (json.Customer or json.customer) or overridden with -P customer]]></parameterDescription>
-		<defaultValueExpression><![CDATA[$P{json} == null ? "" : ({ def s = $P{json}.toString(); def m = (s =~ /(?i)"customer"\s*:\s*"([^\"]*)"/); m.find() ? m[0][1] : "" })()]]></defaultValueExpression>
-	</parameter>
-	<parameter name="jsonDoc" class="java.util.Map">
-		<defaultValueExpression><![CDATA[$P{json} == null ? new java.util.HashMap() : new com.fasterxml.jackson.databind.ObjectMapper().readValue($P{json}.toString(), java.util.Map.class)]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
+	<field name="Date" class="java.lang.String">
+		<fieldDescription><![CDATA[$.Date]]></fieldDescription>
+	</field>
+	<field name="Customer" class="java.lang.String">
+		<fieldDescription><![CDATA[$.Customer]]></fieldDescription>
+	</field>
+	<field name="CustomerApprover" class="java.lang.String">
+		<fieldDescription><![CDATA[$.CustomerApprover]]></fieldDescription>
+	</field>
+	<field name="ESIJobNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[$.ESIJobNumber]]></fieldDescription>
+	</field>
+	<field name="AgreementNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[$.AgreementNumber]]></fieldDescription>
+	</field>
+	<field name="PurchaseOrderNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[$.PurchaseOrderNumber]]></fieldDescription>
+	</field>
+	<field name="WorkBeingDone" class="java.lang.String">
+		<fieldDescription><![CDATA[$.WorkBeingDone]]></fieldDescription>
+	</field>
+	<field name="StartTime" class="java.lang.String">
+		<fieldDescription><![CDATA[$.StartTime]]></fieldDescription>
+	</field>
+	<field name="EndTime" class="java.lang.String">
+		<fieldDescription><![CDATA[$.EndTime]]></fieldDescription>
+	</field>
+	<field name="Subdivision" class="java.lang.String">
+		<fieldDescription><![CDATA[$.Subdivision]]></fieldDescription>
+	</field>
+	<field name="MPRange" class="java.lang.String">
+		<fieldDescription><![CDATA[$.MPRange]]></fieldDescription>
+	</field>
+	<field name="GangName" class="java.lang.String">
+		<fieldDescription><![CDATA[$.GangName]]></fieldDescription>
+	</field>
+	<field name="StateProvince" class="java.lang.String">
+		<fieldDescription><![CDATA[$.StateProvince]]></fieldDescription>
+	</field>
+	<field name="City" class="java.lang.String">
+		<fieldDescription><![CDATA[$.City]]></fieldDescription>
+	</field>
+	<field name="CustomerForeman" class="java.util.Map">
+		<fieldDescription><![CDATA[$.CustomerForeman]]></fieldDescription>
+	</field>
+	<field name="ESIForeman" class="java.util.Map">
+		<fieldDescription><![CDATA[$.ESIForeman]]></fieldDescription>
+	</field>
+	<field name="Employees" class="java.util.List">
+		<fieldDescription><![CDATA[$.Employees]]></fieldDescription>
+	</field>
+	<field name="Equipment" class="java.util.List">
+		<fieldDescription><![CDATA[$.Equipment]]></fieldDescription>
+	</field>
+	<field name="Material" class="java.util.List">
+		<fieldDescription><![CDATA[$.Material]]></fieldDescription>
+	</field>
+	<field name="Subcontractors" class="java.util.List">
+		<fieldDescription><![CDATA[$.Subcontractors]]></fieldDescription>
+	</field>
+	<field name="Comments" class="java.util.List">
+		<fieldDescription><![CDATA[$.Comments]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="250" splitType="Stretch">
-			<image>
+			<image hAlign="Center">
 				<reportElement mode="Opaque" x="165" y="0" width="224" height="24" uuid="cfdecb8e-df6a-4e69-838a-3abcacb7c092"/>
 				<imageExpression><![CDATA[$P{REPORT_DIR} + "images/logo-esi.png"]]></imageExpression>
 			</image>
@@ -68,8 +136,7 @@
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Customer
-Approver]]></text>
+				<text><![CDATA[Customer Approver]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="435" y="50" width="120" height="30" forecolor="#030303" backcolor="#DEDEDE" uuid="af8c9b95-9d44-45a5-8ec5-acf5cc8433a1"/>
@@ -79,8 +146,7 @@ Approver]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Purchase Order
-Number]]></text>
+				<text><![CDATA[Purchase OrderNumber]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="330" y="50" width="105" height="30" forecolor="#030303" backcolor="#DEDEDE" uuid="c70bcced-480b-4948-a819-1ef95cd60e46"/>
@@ -90,8 +156,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<text><![CDATA[Agreement
-Number]]></text>
+				<text><![CDATA[Agreement Number]]></text>
 			</staticText>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="0" y="80" width="80" height="20" uuid="98c2d093-95f8-4f47-bcbc-26fe813aabd9"/>
@@ -101,7 +166,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Date}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="80" y="80" width="170" height="20" uuid="9bcdfac9-ef1d-4fbe-a752-b5af8eed314e"/>
@@ -111,7 +176,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{customer}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Customer}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="250" y="80" width="80" height="20" uuid="0d59d708-7576-4e92-9d62-930dc0970f73"/>
@@ -121,7 +186,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('CustomerApprover'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CustomerApprover} == null ? "" : $F{CustomerApprover}.toString())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="330" y="80" width="105" height="20" uuid="44cc48a8-372a-4724-8774-3d5c9908edd8"/>
@@ -129,7 +194,7 @@ Number]]></text>
 					<pen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('AgreementNumber'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{AgreementNumber} == null ? "" : $F{AgreementNumber}.toString())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="435" y="80" width="120" height="20" uuid="a1fa0ce1-e372-40d1-8f96-170e69738c84"/>
@@ -137,7 +202,7 @@ Number]]></text>
 					<pen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('PurchaseOrderNumber'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{PurchaseOrderNumber} == null ? "" : $F{PurchaseOrderNumber}.toString())]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="100" width="555" height="10" backcolor="#858585" uuid="9f39af70-87b0-46b2-bf5a-2cfca88d1e61"/>
@@ -161,7 +226,7 @@ Number]]></text>
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<paragraph leftIndent="5" rightIndent="5"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('WorkBeingDone'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{WorkBeingDone} == null ? "" : $F{WorkBeingDone}.toString())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="370" y="110" width="90" height="20" forecolor="#030303" backcolor="#DEDEDE" uuid="0d161603-fe34-4844-a2c4-cb98f0b054ec"/>
@@ -185,7 +250,7 @@ Number]]></text>
 					<pen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('StartTime'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{StartTime} == null ? "" : $F{StartTime}.toString())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="460" y="130" width="95" height="20" uuid="cdd21dc9-ccbd-47a6-ba69-7d5fa40bdc3e"/>
@@ -193,7 +258,7 @@ Number]]></text>
 					<pen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('EndTime'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{EndTime} == null ? "" : $F{EndTime}.toString())]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="150" width="555" height="10" backcolor="#858585" uuid="de5ef655-7457-4c5a-abaa-7bef942564f5"/>
@@ -214,7 +279,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('Subdivision'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{Subdivision} == null ? "" : $F{Subdivision}.toString())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="110" y="200" width="110" height="20" uuid="31bc8382-d698-4938-ba14-0b9ef17ee967"/>
@@ -224,7 +289,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('MPRange'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{MPRange} == null ? "" : $F{MPRange}.toString())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="110" y="160" width="110" height="40" forecolor="#030303" backcolor="#DEDEDE" uuid="03bde116-f5e8-4301-84da-878102989020"/>
@@ -250,7 +315,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('GangName'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{GangName} == null ? "" : $F{GangName}.toString())]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement style="Row" mode="Opaque" x="330" y="160" width="225" height="20" forecolor="#030303" backcolor="#DEDEDE" uuid="2bc195ef-feb9-4788-b9f9-1c6da7778867"/>
@@ -284,7 +349,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('StateProvince'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{StateProvince} == null ? "" : $F{StateProvince}.toString())]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="Row" mode="Opaque" x="377" y="200" width="178" height="20" uuid="73545cb9-a60c-47be-88a9-823b14c5419c"/>
@@ -294,7 +359,7 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($P{jsonDoc}.get('City'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{City} == null ? "" : $F{City}.toString())]]></textFieldExpression>
 			</textField>
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="220" width="555" height="10" backcolor="#858585" uuid="02802727-3435-4925-841b-d4ad36c5359e"/>
@@ -331,83 +396,233 @@ Number]]></text>
 	</pageHeader>
 	<detail>
 		<band height="64" splitType="Stretch">
-			<subreport>
-				<reportElement stretchType="ElementGroupHeight" x="0" y="0" width="290" height="64" uuid="bfef655f-91ea-470c-b38f-fe34a6865f25">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="140" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="b91e03b0-1246-4abf-a0cf-7c2c1ed81450">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box padding="3" topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Employee Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="140" y="0" width="70" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="71bd1531-254e-46e7-b928-3e4f11d2f049">
+					<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+				</reportElement>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Position]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="0" width="40" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="967736d8-1a39-45fa-979d-f719fec0b1c6"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[RT/OT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="250" y="0" width="40" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="bb7a0710-e732-4560-a8b1-8fae55b2f8b3"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[HRS]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement stretchType="ElementGroupHeight" x="0" y="25" width="290" height="39" uuid="bfef655f-91ea-470c-b38f-fe34a6865f25">
 					<property name="com.jaspersoft.studio.element.name" value="Employees"/>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource(
-						(java.util.List) ({
-							def doc = $P{jsonDoc}
-							def empSrc = (java.util.List) doc.get("Employees")
-							def eqSrc = (java.util.List) doc.get("Equipment")
-							def emp = empSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(empSrc)
-							def eq = eqSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(eqSrc)
-							def max = Math.max(Math.max(emp.size(), eq.size()), 5)
-							while (emp.size() < max) {
-								def m = new java.util.HashMap()
-								m.put("name", "")
-								m.put("position", "")
-								m.put("rt_ot", "")
-								m.put("hrs", null)
-								emp.add(m)
-							}
-							return emp
-						})()
-					)]]></dataSourceExpression>
-				<subreportExpression><![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport(new java.io.FileInputStream($P{REPORT_DIR} + "employees.jrxml"))]]></subreportExpression>
-			</subreport>
-			<subreport>
-				<reportElement stretchType="ElementGroupHeight" x="290" y="0" width="263" height="64" uuid="f69632d5-04b7-43c4-a712-640682a4e649">
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="EmployeesDataset" uuid="e8fdedb2-2c18-42d2-b508-4a5954707baf">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource((java.util.List) ($F{Employees} == null ? new java.util.ArrayList() : (java.util.List)$F{Employees}))]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="290">
+						<textField>
+							<reportElement x="0" y="0" width="140" height="18" uuid="616f8492-2848-4d80-abc7-d5155df7f799"/>
+							<box padding="3">
+								<pen lineWidth="1.0" lineStyle="Solid"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<font fontName="Serif" size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{name} == null ? "" : $F{name}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="140" y="0" width="70" height="18" uuid="0d237b77-0861-43a3-91a2-40782a28c10e"/>
+							<box padding="0">
+								<pen lineWidth="1.0" lineStyle="Solid"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{position} == null ? "" : $F{position}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="210" y="0" width="40" height="18" uuid="829d11a5-4eb3-413d-b4d5-b3bc0b107ef4"/>
+							<box padding="0">
+								<pen lineWidth="1.0" lineStyle="Solid"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{rt_ot} == null ? "" : $F{rt_ot}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0.##">
+							<reportElement x="250" y="0" width="40" height="18" uuid="e3b73954-2cea-4ff7-89cc-2104968d0d0d"/>
+							<box padding="0">
+								<pen lineWidth="1.0" lineStyle="Solid"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{hrs} == null ? "" : (new java.text.DecimalFormat("#,##0.##")).format($F{hrs})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+			<staticText>
+				<reportElement mode="Opaque" x="290" y="0" width="150" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="d8d19faf-406f-44a3-abc7-31ca069eefaa"/>
+				<box padding="3">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Equipment Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="440" y="0" width="53" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="1c26b7ac-25f4-4161-ae21-35b8fb0257fc"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="493" y="0" width="62" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="bc10178a-4e31-4773-a57e-22e2b587eda7"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[HRS]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement stretchType="ElementGroupHeight" x="290" y="25" width="265" height="39" uuid="f69632d5-04b7-43c4-a712-640682a4e649">
 					<property name="com.jaspersoft.studio.element.name" value="Equipment"/>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource(
-						(java.util.List) ({
-							def doc = $P{jsonDoc}
-							def empSrc = (java.util.List) doc.get("Employees")
-							def eqSrc = (java.util.List) doc.get("Equipment")
-							def emp = empSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(empSrc)
-							def eq = eqSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(eqSrc)
-							def max = Math.max(Math.max(emp.size(), eq.size()), 5)
-							while (eq.size() < max) {
-								def m = new java.util.HashMap()
-								m.put("name", "")
-								m.put("type", "")
-								m.put("hrs", null)
-								eq.add(m)
-							}
-							return eq
-						})()
-					)]]></dataSourceExpression>
-				<subreportExpression><![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport(new java.io.FileInputStream($P{REPORT_DIR} + "equipment.jrxml"))]]></subreportExpression>
-			</subreport>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="EquipmentDataset" uuid="b1c2d3e4-5f60-4789-acbd-0123456789ab">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource((java.util.List) ($F{Equipment} == null ? new java.util.ArrayList() : (java.util.List)$F{Equipment}))]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="265">
+						<textField>
+							<reportElement x="0" y="0" width="150" height="18" uuid="77244863-3c4b-43ae-b691-5c36ce4982e5"/>
+							<box padding="3">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{name} == null ? "" : $F{name}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="150" y="0" width="53" height="18" uuid="81a73fd8-d1ca-4052-87a8-1cf28ced4907"/>
+							<box padding="0">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{type} == null ? "" : $F{type}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0.##">
+							<reportElement x="203" y="0" width="62" height="18" uuid="b43dfb7a-0597-4542-bbe0-e146e360557d"/>
+							<box padding="0">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{hrs} == null ? "" : (new java.text.DecimalFormat("#,##0.##")).format($F{hrs})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
 		</band>
 		<band height="95">
 			<rectangle>
 				<reportElement mode="Opaque" x="0" y="0" width="555" height="10" backcolor="#858585" uuid="cfcef887-fe44-4918-9d15-b8b73efd723e"/>
 			</rectangle>
-			<subreport>
-				<reportElement stretchType="ElementGroupHeight" x="0" y="30" width="290" height="64" uuid="2d76f7ca-6169-4d14-b675-02b82afa7f1d">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="30" width="210" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="26f710ab-c118-4cc2-b8b2-1a7dc05f3b2b"/>
+				<box padding="3">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Material]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="210" y="30" width="80" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="33c278c4-513e-45f5-90e7-c5652eb58250"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[QTY]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement stretchType="ElementGroupHeight" x="0" y="55" width="290" height="39" uuid="2d76f7ca-6169-4d14-b675-02b82afa7f1d">
 					<property name="com.jaspersoft.studio.element.name" value="Material"/>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource(
-						(java.util.List) ({
-							def doc = $P{jsonDoc}
-							def matSrc = (java.util.List) doc.get("Material")
-							def subSrc = (java.util.List) doc.get("Subcontractors")
-							def mat = matSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(matSrc)
-							def sub = subSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(subSrc)
-							def max = Math.max(Math.max(mat.size(), sub.size()), 5)
-							while (mat.size() < max) {
-								def m = new java.util.HashMap()
-								m.put("name", "")
-								m.put("qty", null)
-								mat.add(m)
-							}
-							return mat
-						})()
-					)]]></dataSourceExpression>
-				<subreportExpression><![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport(new java.io.FileInputStream($P{REPORT_DIR} + "material.jrxml"))]]></subreportExpression>
-			</subreport>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="MaterialDataset" uuid="e2f3a4b5-c6d7-48e9-af01-23456789abcd">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource((java.util.List) ($F{Material} == null ? new java.util.ArrayList() : (java.util.List)$F{Material}))]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="290">
+						<textField>
+							<reportElement x="0" y="0" width="210" height="18" uuid="4a3f55e7-0770-4f53-aec0-673bd7d56182"/>
+							<box padding="3">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{name} == null ? "" : $F{name}]]></textFieldExpression>
+						</textField>
+						<textField pattern="#,##0.##">
+							<reportElement x="210" y="0" width="80" height="18" uuid="4e8f32cd-8fe4-48b8-8221-6f0dac73b186"/>
+							<box padding="0">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{qty} == null ? "" : (new java.text.DecimalFormat("#,##0.##")).format($F{qty})]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
 			<staticText>
 				<reportElement mode="Opaque" x="0" y="10" width="290" height="20" forecolor="#030303" backcolor="#DEDEDE" uuid="187f8380-aafb-4ee8-9ac6-cef0f5c0d22d"/>
 				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -416,31 +631,60 @@ Number]]></text>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Serif" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Material]]></text>
+				<text><![CDATA[Materials]]></text>
 			</staticText>
-			<subreport>
-				<reportElement stretchType="ElementGroupHeight" x="290" y="30" width="263" height="64" uuid="dcd637a8-3327-44f0-95cf-197555ec9a6f">
+			<staticText>
+				<reportElement mode="Opaque" x="290" y="30" width="140" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="71287e7c-9e0d-4c78-8d56-44c7e01898cf"/>
+				<box padding="3">
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="430" y="30" width="125" height="24" forecolor="#030303" backcolor="#DEDEDE" uuid="0da0a011-ceb5-4e2b-bacc-9527ab5eeaa6"/>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<text><![CDATA[Work Done]]></text>
+			</staticText>
+			<componentElement>
+				<reportElement stretchType="ElementGroupHeight" x="290" y="55" width="265" height="39" uuid="dcd637a8-3327-44f0-95cf-197555ec9a6f">
 					<property name="com.jaspersoft.studio.element.name" value="Subcontractor"/>
 				</reportElement>
-				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource(
-						(java.util.List) ({
-							def doc = $P{jsonDoc}
-							def matSrc = (java.util.List) doc.get("Material")
-							def subSrc = (java.util.List) doc.get("Subcontractors")
-							def mat = matSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(matSrc)
-							def sub = subSrc == null ? new java.util.ArrayList() : new java.util.ArrayList(subSrc)
-							def max = Math.max(Math.max(mat.size(), sub.size()), 5)
-							while (sub.size() < max) {
-								def m = new java.util.HashMap()
-								m.put("name", "")
-								m.put("workDone", "")
-								sub.add(m)
-							}
-							return sub
-						})()
-					)]]></dataSourceExpression>
-				<subreportExpression><![CDATA[net.sf.jasperreports.engine.JasperCompileManager.compileReport(new java.io.FileInputStream($P{REPORT_DIR} + "subcontractor.jrxml"))]]></subreportExpression>
-			</subreport>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="SubcontractorDataset" uuid="f3a4b5c6-d7e8-49f0-a123-456789abcdef">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRMapCollectionDataSource((java.util.List) ($F{Subcontractors} == null ? new java.util.ArrayList() : (java.util.List)$F{Subcontractors}))]]></dataSourceExpression>
+					</datasetRun>
+					<jr:listContents height="18" width="265">
+						<textField>
+							<reportElement x="0" y="0" width="140" height="18" uuid="1f5bf0bb-3324-4a78-ace5-1a3851981f9e"/>
+							<box padding="3">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Left" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{name} == null ? "" : $F{name}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement x="140" y="0" width="125" height="18" uuid="9afacda3-8bc7-45d9-b2cf-90054078f3ee"/>
+							<box padding="0">
+								<pen lineWidth="1.0"/>
+							</box>
+							<textElement textAlignment="Center" verticalAlignment="Middle">
+								<font size="8"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$F{workDone} == null ? "" : $F{workDone}]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
 			<staticText>
 				<reportElement mode="Opaque" x="290" y="10" width="265" height="20" forecolor="#030303" backcolor="#DEDEDE" uuid="5c9b744c-d6be-4f4f-80f0-4f29b1dbcc3a"/>
 				<box topPadding="0" leftPadding="0" bottomPadding="0" rightPadding="0">
@@ -471,10 +715,8 @@ Number]]></text>
 				<textElement>
 					<font fontName="Serif" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$P{json} == null ? "" : ({
-					def doc = $P{jsonDoc}
-					def src = (java.util.List) (doc.get("Comments") == null ? doc.get("comments") : doc.get("Comments"))
-					if (src == null || src.size() == 0) return ""
+				<textFieldExpression><![CDATA[$F{Comments} == null || $F{Comments}.size() == 0 ? "" : ({
+					def src = (java.util.List) $F{Comments}
 					def sb = new StringBuilder()
 					for (int i=0;i<src.size();i++) {
 						def e = src.get(i)
@@ -494,11 +736,7 @@ Number]]></text>
 					<pen lineWidth="1.0"/>
 				</box>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$P{json} == null ? "ESI job #" : ({
-					def doc = $P{jsonDoc}
-					def v = doc.get("ESIJobNumber")
-					return "ESI job #" + (v == null ? "" : (" " + v.toString()))
-				})()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{ESIJobNumber} == null ? "ESI job #" : ("ESI job #" + $F{ESIJobNumber}.toString())]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -590,20 +828,20 @@ Number]]></text>
 				<textElement textAlignment="Center"/>
 				<text><![CDATA[Signature]]></text>
 			</staticText>
-				<textField>
-					<reportElement x="300" y="30" width="110" height="18" uuid="554aad4e-23e3-430d-8be7-52209045c5de"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[($P{jsonDoc}.get('ESIForeman')?.get('name'))?.toString() ?: ""]]></textFieldExpression>
-				</textField>
+			<textField>
+				<reportElement x="300" y="30" width="110" height="18" uuid="554aad4e-23e3-430d-8be7-52209045c5de"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($F{ESIForeman} == null ? "" : ($F{ESIForeman}.get("name") == null ? "" : $F{ESIForeman}.get("name").toString()))]]></textFieldExpression>
+			</textField>
 			<textField>
 				<reportElement x="10" y="30" width="70" height="18" uuid="96c2cdc8-3786-423f-85da-3aba827dd59f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-			<textFieldExpression><![CDATA[($P{jsonDoc}.get('CustomerForeman')?.get('name'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CustomerForeman} == null ? "" : ($F{CustomerForeman}.get("name") == null ? "" : $F{CustomerForeman}.get("name").toString()))]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="90" y="30" width="75" height="18" uuid="d22234bc-bd91-4d03-9678-bf4a327cd042"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-					<textFieldExpression><![CDATA[($P{jsonDoc}.get('CustomerForeman')?.get('employeeNumber'))?.toString() ?: ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{CustomerForeman} == null ? "" : ($F{CustomerForeman}.get("employeeNumber") == null ? "" : $F{CustomerForeman}.get("employeeNumber").toString()))]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
