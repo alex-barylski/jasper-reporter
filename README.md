@@ -15,11 +15,12 @@ Designed to run as a **sidecar container** alongside any PHP application, sharin
    - [GET /list](#get-list)
 3. [Error Envelope Format](#error-envelope-format)
 4. [Standalone Build](#standalone-build)
-5. [Dockerfile Instructions](#dockerfile-instructions)
-6. [Docker Compose Example](#docker-compose-example)
-7. [PHP Usage Examples](#php-usage-examples)
-8. [Configuration](#configuration)
-9. [Security Notes](#security-notes)
+5. [Testing Reports with build.sh](#testing-reports-with-buildsh)
+6. [Dockerfile Instructions](#docker--container-registry)
+7. [Docker Compose Example](#docker-compose-example)
+8. [PHP Usage Examples](#php-usage-examples)
+9. [Configuration](#configuration)
+10. [Security Notes](#security-notes)
 
 ---
 
@@ -225,6 +226,61 @@ HTTP status codes:
 ## Standalone Build
 
 See [build.MD](./build.MD) for the non-Docker build, run, and test flow.
+
+---
+
+## Testing Reports with build.sh
+
+The `reports/build.sh` script provides a quick way to compile and render reports via the HTTP API. It accepts a report name (with `.jrxml` extension) and generates a PDF in `/tmp`, which opens in your default PDF viewer.
+
+### From the Host
+
+First, start the container with port mapping and volume mount:
+
+```bash
+docker run -d --name jasper \
+  -p 9000:8080 \
+  -e PORT=8080 \
+  -e REPORTS_DIR=/app/reports \
+  -v "$(pwd)/reports:/app/reports" \
+  ghcr.io/alex-barylski/jasper-reporter:latest
+```
+
+Then run the test script from your host:
+
+```bash
+cd reports
+./build.sh timesheet.jrxml --port 9000
+```
+
+The script will:
+1. Compile `timesheet.jrxml` → `timesheet.jasper`
+2. Render using `timesheet.json` as datasource
+3. Save PDF to `/tmp/timesheet-{timestamp}.pdf`
+4. Open in Preview (or default PDF viewer)
+
+### From Inside the Container
+
+```bash
+docker exec -it jasper bash -c "cd /app/reports && ./build.sh timesheet.jrxml"
+```
+
+The script uses port 8080 by default when run inside the container.
+
+### Usage
+
+```bash
+./build.sh <report-file.jrxml> [--port PORT]
+
+# Examples:
+./build.sh timesheet.jrxml              # Uses port 8080
+./build.sh timesheet.jrxml --port 9000  # Uses port 9000
+```
+
+**Requirements:**
+- JSON datasource file must exist (e.g., `timesheet.json` for `timesheet.jrxml`)
+- Service must be running and accessible
+- `curl` and `jq` must be available (standard on macOS/Linux)
 
 ---
 
